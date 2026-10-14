@@ -113,3 +113,52 @@ py -m unittest tests/test_preprocessing.py
 - [ ] **Week 3**: Drug matching engine (RapidFuzz + RxNorm API integration)
 - [ ] **Week 3-4**: Regex dosage parsing engine & interactive Streamlit web dashboard
 - [ ] **Week 4+**: CER/WER evaluation benchmark & embedding-based matching
+
+Week 1-2:
+Tesseract OCR Engine (tesseract_engine.py):
+
+Auto-Detection: Automatically locates tesseract.exe in C:\Program Files\Tesseract-OCR\, AppData, or the system PATH.
+Dual Recognition Modes:
+Page-Level OCR (PSM 6): Runs on the full binarized prescription.
+Line-Segment OCR (PSM 7): Runs single-line mode on each cropped strip from Stage 1. This prevents line-skipping and multi-column misalignment common in handwriting.
+Confidence Extraction: Computes average confidence scores and extracts word-level bounding boxes.
+
+CER/WER Evaluator & Error Analysis (evaluator.py):
+
+Implemented dynamic-programming Levenshtein distance to compute:
+Character Error Rate (CER): 
+Insertions
++
+Deletions
++
+Substitutions
+Reference Characters
+Reference Characters
+Insertions+Deletions+Substitutions
+	​
+
+Word Error Rate (WER): 
+Insertions
++
+Deletions
++
+Substitutions
+Reference Words
+Reference Words
+Insertions+Deletions+Substitutions
+	​
+
+Reports word recall and isolates missed medical entities.
+
+Baseline Benchmark Runner (run_ocr_baseline.py):
+
+Preprocesses and executes OCR on:
+Synthetic scan (prescription_scan.png)
+Synthetic tilted/shadowed photo (prescription_photo.png)
+Your real handwritten doctor note (sample_real.jpg)
+Computes CER/WER against ground truth and exports diagnostic JSONs to data/processed/.
+
+Unit Test Suite (test_ocr.py):
+
+Tested distance calculations, identical texts, handwriting typo cases, and engine structures:
+Ran 6 tests in 0.035s: OK
